@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Pulse — New Tools & Funding Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050810;
+    --bg2: #0c1120;
+    --accent: #00f5c4;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --border: rgba(255,255,255,0.07);
+    --card: rgba(255,255,255,0.03);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content:'';
+    position:fixed;
+    inset:0;
+    background-image:
+      linear-gradient(rgba(0,245,196,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,196,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events:none;
+    z-index:0;
+  }
+  header {
+    position:sticky; top:0; z-index:100;
+    background:rgba(5,8,16,0.92);
+    backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--border);
+    padding:0 1.5rem;
+  }
+  .header-inner {
+    max-width:1200px; margin:0 auto;
+    display:flex; align-items:center; justify-content:space-between;
+    height:60px;
+  }
+  .logo {
+    font-family:'Syne',sans-serif;
+    font-weight:800; font-size:1.3rem;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo-dot {
+    width:10px; height:10px;
+    background:var(--accent);
+    border-radius:50%;
+    box-shadow:0 0 12px var(--accent);
+    animation:pulse 2s infinite;
+  }
+  .logo span { color:var(--accent); }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
+  .live-badge {
+    background:rgba(0,245,196,0.1);
+    border:1px solid rgba(0,245,196,0.3);
+    color:var(--accent);
+    font-size:0.7rem; padding:4px 12px;
+    border-radius:100px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .live-dot { width:6px; height:6px; background:var(--accent); border-radius:50%; animation:pulse 1.5s infinite; }
+  .refresh-btn {
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:7px 16px; border-radius:8px;
+    font-family:'DM Mono',monospace;
+    font-size:0.78rem; cursor:pointer;
+    transition:all 0.2s;
+    display:flex; align-items:center; gap:6px;
+  }
+  .refresh-btn:hover { background:rgba(0,245,196,0.1); border-color:var(--accent); color:var(--accent); }
+  .spin { animation:spinIt 1s linear infinite; display:inline-block; }
+  @keyframes spinIt { to { transform:rotate(360deg); } }
+
+  /* Hero */
+  .hero {
+    position:relative; z-index:1;
+    max-width:1200px; margin:0 auto;
+    padding:3rem 1.5rem 1.5rem;
+  }
+  .hero h1 {
+    font-family:'Syne',sans-serif;
+    font-size:clamp(2rem,5vw,3.5rem);
+    font-weight:800; line-height:1.05;
+    letter-spacing:-0.03em; margin-bottom:0.75rem;
+  }
+  .hero h1 em { color:var(--accent); font-style:normal; }
+  .hero p { color:var(--muted); font-size:0.9rem; max-width:450px; line-height:1.7; }
+
+  /* Stats */
+  .stats {
+    position:relative; z-index:1;
+    max-width:1200px; margin:0 auto 1.5rem;
+    padding:0 1.5rem;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+    gap:0.75rem;
+  }
+  .stat {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px; padding:1rem;
+  }
+  .stat-label { font-size:0.65rem; color:var(--muted); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:4px; }
+  .stat-val { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:700; }
+  .green { color:var(--accent); }
+  .purple { color:#a78bfa; }
+  .amber { color:var(--accent3); }
+  .gray { color:var(--muted); font-size:0.85rem !important; }
+
+  /* Filters */
+  .filters {
+    position:relative; z-index:1;
+    max-width:1200px; margin:0 auto 1.5rem;
+    padding:0 1.5rem;
+    display:flex; gap:0.5rem; flex-wrap:wrap;
+  }
+  .fbtn {
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:5px 14px; border-radius:100px;
+    font-family:'DM Mono',monospace;
+    font-size:0.75rem; cursor:pointer;
+    transition:all 0.2s;
+  }
+  .fbtn:hover,.fbtn.active { background:rgba(0,245,196,0.1); border-color:rgba(0,245,196,0.4); color:var(--accent); }
+  .fbtn.fa.active { background:rgba(124,58,237,0.1); border-color:rgba(124,58,237,0.4); color:#a78bfa; }
+
+  /* Layout */
+  .main {
+    position:relative; z-index:1;
+    max-width:1200px; margin:0 auto;
+    padding:0 1.5rem 4rem;
+    display:grid;
+    grid-template-columns:1fr 300px;
+    gap:1.5rem;
+  }
+  @media(max-width:800px){ .main{ grid-template-columns:1fr; } }
+
+  /* Search */
+  .search-wrap { position:relative; margin-bottom:1rem; }
+  .search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:0.85rem; }
+  .search-in {
+    width:100%;
+    background:var(--card);
+    border:1px solid var(--border);
+    color:var(--text);
+    font-family:'DM Mono',monospace;
+    font-size:0.82rem;
+    padding:9px 14px 9px 38px;
+    border-radius:10px; outline:none;
+    transition:border-color 0.2s;
+  }
+  .search-in:focus { border-color:rgba(0,245,196,0.4); }
+  .search-in::placeholder { color:var(--muted); }
+
+  .feed-title {
+    font-family:'Syne',sans-serif;
+    font-size:0.78rem; font-weight:700;
+    color:var(--muted); letter-spacing:0.1em;
+    text-transform:uppercase;
+    margin-bottom:0.75rem;
+    padding-bottom:0.4rem;
+    border-bottom:1px solid var(--border);
+  }
+
+  /* Cards */
+  .card {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px; padding:1.25rem;
+    margin-bottom:0.75rem;
+    transition:all 0.25s;
+    animation:slideIn 0.35s ease forwards;
+    opacity:0; transform:translateY(8px);
+  }
+  @keyframes slideIn { to { opacity:1; transform:translateY(0); } }
+  .card:hover {
+    background:rgba(255,255,255,0.05);
+    border-color:rgba(0,245,196,0.2);
+    box-shadow:0 0 25px rgba(0,245,196,0.08);
+    transform:translateY(-2px);
+  }
+  .card.fc:hover { border-color:rgba(124,58,237,0.25); box-shadow:0 0 25px rgba(124,58,237,0.08); }
+  .card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:0.75rem; margin-bottom:0.6rem; }
+  .card-title { font-family:'Syne',sans-serif; font-size:0.98rem; font-weight:700; line-height:1.3; }
+  .badge {
+    font-size:0.62rem; font-weight:500;
+    padding:3px 9px; border-radius:100px;
+    letter-spacing:0.07em; text-transform:uppercase;
+    white-space:nowrap; flex-shrink:0;
+  }
+  .bn { background:rgba(0,245,196,0.12); color:var(--accent); border:1px solid rgba(0,245,196,0.25); }
+  .bf { background:rgba(124,58,237,0.12); color:#a78bfa; border:1px solid rgba(124,58,237,0.25); }
+  .bu { background:rgba(245,158,11,0.12); color:var(--accent3); border:1px solid rgba(245,158,11,0.25); }
+  .card-meta { display:flex; gap:0.75rem; font-size:0.7rem; color:var(--muted); margin-bottom:0.6rem; flex-wrap:wrap; }
+  .card-summary { font-size:0.82rem; line-height:1.6; color:#94a3b8; }
+  .card-tags { display:flex; gap:0.35rem; flex-wrap:wrap; margin-top:0.75rem; }
+  .tag { font-size:0.65rem; padding:2px 9px; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:100px; color:var(--muted); }
+  .funding-amt { font-family:'Syne',sans-serif; font-size:1.2rem; font-weight:700; color:#a78bfa; margin:0.4rem 0; }
+  .empty { text-align:center; padding:3rem; color:var(--muted); font-size:0.85rem; }
+
+  /* Sidebar */
+  .sidebar-box {
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px; padding:1.1rem;
+    margin-bottom:1.25rem;
+  }
+  .sidebar-title {
+    font-family:'Syne',sans-serif;
+    font-size:0.75rem; font-weight:700;
+    letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:0.75rem;
+    padding-bottom:0.4rem; border-bottom:1px solid var(--border);
+  }
+  .t-item {
+    display:flex; align-items:center; gap:0.6rem;
+    padding:0.5rem 0; border-bottom:1px solid var(--border);
+    font-size:0.8rem; cursor:pointer; transition:color 0.2s;
+  }
+  .t-item:last-child { border-bottom:none; }
+  .t-item:hover { color:var(--accent); }
+  .t-rank { font-family:'Syne',sans-serif; font-weight:700; font-size:1rem; color:rgba(255,255,255,0.1); width:20px; flex-shrink:0; }
+  .t-name { flex:1; }
+  .t-badge { font-size:0.6rem; padding:2px 7px; background:rgba(0,245,196,0.08); color:var(--accent); border-radius:100px; }
+
+  /* Toast */
+  .toast {
+    position:fixed; bottom:1.5rem; right:1.5rem;
+    background:var(--bg2); border:1px solid var(--accent);
+    color:var(--accent); padding:10px 18px;
+    border-radius:10px; font-size:0.78rem;
+    z-index:1000; transform:translateY(80px); opacity:0;
+    transition:all 0.3s;
+  }
+  .toast.show { transform:translateY(0); opacity:1; }
+
+  /* News ticker */
+  .ticker-wrap {
+    position:relative; z-index:1;
+    background:rgba(0,245,196,0.05);
+    border-top:1px solid rgba(0,245,196,0.1);
+    border-bottom:1px solid rgba(0,245,196,0.1);
+    overflow:hidden; padding:8px 0;
+    margin-bottom:0;
+  }
+  .ticker {
+    display:flex; gap:3rem;
+    animation:tickerMove 40s linear infinite;
+    white-space:nowrap;
+  }
+  .ticker span { font-size:0.72rem; color:var(--accent); opacity:0.7; }
+  .ticker span strong { opacity:1; }
+  @keyframes tickerMove { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  /* Ad Slots — hidden until AdSense approved */
+  .ad-slot { display:none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><div class="logo-dot"></div>AI<span>Pulse</span></div>
+    <div style="display:flex;align-items:center;gap:0.75rem">
+      <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+      <button class="refresh-btn" id="rBtn" onclick="refresh()"><span id="rIcon">↻</span> Refresh</button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ GOOGLE ADSENSE — Yahan apna Publisher ID daalo ═══ -->
+<!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+<!-- TOP BANNER AD (728x90 Leaderboard) -->
+<div style="max-width:1200px;margin:0 auto;padding:0.75rem 1.5rem 0;">
+  <div class="ad-slot ad-slot-top">
+    <div class="ad-label">Advertisement</div>
+    <!-- Google AdSense Code — Activate karne ke baad yahan daalo:
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    -->
+    <span>📢 Google AdSense Banner Ad — 728×90</span>
+  </div>
+</div>
+
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker"></div>
+</div>
+
+<div class="hero">
+  <h1>Naye AI Tools aur<br><em>Funding</em> ki<br>Latest News</h1>
+  <p>Jo bhi naya AI tool launch ho, ya kisi ko funding mile — sab kuch ek jagah, real-time mein.</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-label">Naye Tools</div><div class="stat-val green" id="sc">0</div></div>
+  <div class="stat"><div class="stat-label">Funding Rounds</div><div class="stat-val purple" id="fc">0</div></div>
+  <div class="stat"><div class="stat-label">Total Funding</div><div class="stat-val amber" id="tf">—</div></div>
+  <div class="stat"><div class="stat-label">Updated</div><div class="stat-val gray" id="lu">—</div></div>
+</div>
+
+<div class="filters">
+  <button class="fbtn active" onclick="setF('all',this)">🔥 Sab</button>
+  <button class="fbtn" onclick="setF('new',this)">🚀 Naye Tools</button>
+  <button class="fbtn fa" onclick="setF('funding',this)">💰 Funding</button>
+  <button class="fbtn" onclick="setF('update',this)">⚡ Updates</button>
+</div>
+
+<div class="main">
+  <div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-in" id="sq" placeholder="Search karo — tool ya company naam..." oninput="renderCards()">
+    </div>
+    <div class="feed-title">Live Feed</div>
+    <div id="feed"></div>
+
+    <!-- MID FEED AD (300x250 Rectangle) -->
+    <div class="ad-slot ad-slot-mid" style="margin-top:1rem">
+      <div class="ad-label">Advertisement</div>
+      <!-- AdSense Rectangle Ad:
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="rectangle"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+      <span>📢 Google AdSense Rectangle — 300×250</span>
+    </div>
+  </div>
+
+  <div>
+    <div class="sidebar-box">
+      <div class="sidebar-title">🔥 Trending Tools</div>
+      <div id="trending"></div>
+    </div>
+    <div class="sidebar-box">
+      <div class="sidebar-title">💰 Top Funding</div>
+      <div id="topf"></div>
+    </div>
+    <div class="sidebar-box">
+      <div class="sidebar-title">📊 Categories</div>
+      <div id="cats"></div>
+    </div>
+
+    <!-- SIDEBAR AD (300x250) -->
+    <div class="ad-slot ad-slot-sidebar">
+      <div class="ad-label">Advertisement</div>
+      <!-- AdSense Sidebar Ad:
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+           data-ad-slot="XXXXXXXXXX"
+           data-ad-format="rectangle"></ins>
+      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      -->
+      <span>📢 Google AdSense Sidebar — 300×250</span>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── All news data ──────────────────────────────────────────────
+const allData = [
+  // NEW TOOLS
+  { id:1, type:"new", title:"Sora 2.0 — OpenAI ka naya Video Generator", company:"OpenAI", date:"Feb 2025", category:"Video", amount:null,
+    summary:"OpenAI ne Sora ka upgraded version launch kiya hai. Ab 4K quality mein 2 minute tak ki videos ban sakti hain. Text-to-video mein yeh abhi tak ka sabse powerful tool hai — realistic physics aur camera movements ke saath.",
+    tags:["Video","Text-to-Video","OpenAI"] },
+  { id:2, type:"new", title:"Gemini 2.0 Flash — Google ka Ultra-Fast Model", company:"Google DeepMind", date:"Jan 2025", category:"LLM",  amount:null,
+    summary:"Google ne Gemini 2.0 Flash release kiya — yeh model Gemini 1.5 se 2x tez hai aur cost bhi kam hai. Multimodal capabilities mein audio, video, aur text sab supported hain. Developers ke liye yeh game changer sabit ho sakta hai.",
+    tags:["LLM","Google","Fast","Multimodal"] },
+  { id:3, type:"new", title:"Cursor 0.44 — AI Coding ka Raja", company:"Anysphere", date:"Feb 2025", category:"Coding", amount:null,
+    summary:"Cursor ka latest update aaya — ab poori codebase ko ek saath samajh ke code likhta hai. Multi-file editing aur automatic bug fixing features ne ise developers ka favorite bana diya hai. GitHub Copilot se kaafi better experience hai.",
+    tags:["Coding","IDE","Developer"] },
+  { id:4, type:"new", title:"Perplexity Assistant — AI Phone Agent", company:"Perplexity AI", date:"Feb 2025", category:"Agent", amount:null,
+    summary:"Perplexity ne ek full phone assistant launch kiya jo calls kar sakta hai, appointments book kar sakta hai, aur real-time web search ke saath sawal jawab de sakta hai. Yeh Android pe pehle available hai.",
+    tags:["Agent","Search","Mobile"] },
+  { id:5, type:"new", title:"ElevenLabs Voice Design — Custom AI Voices", company:"ElevenLabs", date:"Jan 2025", category:"Voice", amount:null,
+    summary:"ElevenLabs ne Voice Design feature launch kiya — ab sirf text description se apni marzi ki awaaz bana sakte ho. Accent, age, gender, sab customize hoga. 29 languages support ke saath yeh voice technology mein revolution hai.",
+    tags:["Voice","TTS","Audio"] },
+  { id:6, type:"new", title:"Midjourney V7 — Photorealistic Image AI", company:"Midjourney", date:"Feb 2025", category:"Image", amount:null,
+    summary:"Midjourney V7 aa gaya aur yeh V6 se kaafi better hai. Human faces aur hands ab perfect ban rahe hain. Naya 'Personalization' feature tumhari style ko seekh ke future images mein apply karta hai.",
+    tags:["Image","Art","Creative"] },
+  { id:7, type:"new", title:"Devin 2.0 — Fully Autonomous AI Developer", company:"Cognition AI", date:"Jan 2025", category:"Coding", amount:null,
+    summary:"Cognition AI ne Devin ka updated version launch kiya. Ab Devin poori apps khud se bana sakta hai, deploy kar sakta hai, aur bugs fix kar sakta hai — bina kisi human help ke. Enterprise customers ke liye yeh already available hai.",
+    tags:["Coding","Autonomous","Agent"] },
+  // FUNDING
+  { id:8, type:"funding", title:"Anthropic ne $2 Billion ki Funding Haasil Ki", company:"Anthropic", date:"Jan 2025", category:"LLM", amount:"$2B Series E",
+    summary:"Claude banane wali company Anthropic ko Amazon ne $2 Billion ki additional funding di. Total valuation ab $60 Billion ho gayi. Yeh paisa AI safety research aur Claude ke naye versions pe lagaya jayega.",
+    tags:["Funding","LLM","Safety"] },
+  { id:9, type:"funding", title:"xAI (Grok) ne $6 Billion Raise Kiye", company:"xAI", date:"Dec 2024", category:"LLM", amount:"$6B Series B",
+    summary:"Elon Musk ki AI company xAI ne $6 Billion ki massive funding raise ki. Grok AI ko aur powerful banane aur supercomputer infrastructure banane ke liye yeh investment aaya hai. Total valuation $50 Billion hai.",
+    tags:["Funding","Grok","Musk"] },
+  { id:10, type:"funding", title:"Mistral AI — $1 Billion European AI Funding", company:"Mistral AI", date:"Jan 2025", category:"LLM", amount:"$1B Series C",
+    summary:"French AI startup Mistral AI ne $1 Billion raise karke Europe ki sabse valuable AI company ban gayi. Open source models ke saath yeh OpenAI aur Google ko European market mein challenge kar rahi hai.",
+    tags:["Funding","OpenSource","Europe"] },
+  { id:11, type:"funding", title:"Perplexity AI — $500M at $9B Valuation", company:"Perplexity AI", date:"Jan 2025", category:"Search", amount:"$500M Series D",
+    summary:"AI search engine Perplexity ne $500 Million raise kiye aur valuation $9 Billion ho gayi. Google ko replace karne ka sapna liye yeh company tezi se grow ho rahi hai — 15 million daily active users hain.",
+    tags:["Funding","Search","Startup"] },
+  { id:12, type:"funding", title:"Anysphere (Cursor) — $900M Raised", company:"Anysphere", date:"Dec 2024", category:"Coding", amount:"$900M Series C",
+    summary:"Cursor banane wali company Anysphere ne $900 Million raise kiye at $9.9 Billion valuation. Sirf 2 saal mein yeh valuation incredible hai. AI coding tools market mein Cursor dominant player ban chuka hai.",
+    tags:["Funding","Coding","Startup"] },
+  // UPDATES
+  { id:13, type:"update", title:"ChatGPT ab Free Users ko bhi Image Generation Dega", company:"OpenAI", date:"Feb 2025", category:"Image", amount:null,
+    summary:"OpenAI ne announce kiya ki DALL-E 3 image generation ab free ChatGPT users ke liye bhi available hoga — limited usage ke saath. Pehle yeh sirf Plus subscribers ke liye tha. Yeh decision Midjourney aur Adobe ko compete karne ke liye aaya.",
+    tags:["ChatGPT","Image","Free"] },
+  { id:14, type:"update", title:"Claude ab PDF aur Excel Files Directly Padh Sakta Hai", company:"Anthropic", date:"Feb 2025", category:"Productivity", amount:null,
+    summary:"Anthropic ne Claude mein new file handling capabilities add ki hain. Ab aap seedha PDF, Excel, aur Word files upload karke Claude se analyze karwa sakte ho. Large documents ke saath kaam karna ab bahut aasaan ho gaya hai.",
+    tags:["Claude","Files","Productivity"] },
+  { id:15, type:"update", title:"Gemini Advanced ab Google Workspace mein Integrated", company:"Google", date:"Jan 2025", category:"Productivity", amount:null,
+    summary:"Google ne Gemini Advanced ko Gmail, Docs, Sheets, aur Slides mein fully integrate kar diya. Ab AI directly tumhare documents mein kaam karega — emails draft karega, data analyze karega, aur presentations banayega.",
+    tags:["Google","Workspace","Integration"] },
+];
+
+let currentFilter = 'all';
+
+// ── Init ──────────────────────────────────────────────────────
+function init() {
+  renderCards();
+  updateStats();
+  renderTrending();
+  renderTopFunding();
+  renderCategories();
+  buildTicker();
+  updateTime();
+  showToast("✓ Feed loaded!");
+}
+
+// ── Render cards ──────────────────────────────────────────────
+function renderCards() {
+  const q = document.getElementById('sq').value.toLowerCase();
+  const filtered = allData.filter(d => {
+    if (currentFilter !== 'all' && d.type !== currentFilter) return false;
+    if (q && !d.title.toLowerCase().includes(q) && !d.company.toLowerCase().includes(q) && !d.summary.toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  if (!filtered.length) {
+    document.getElementById('feed').innerHTML = '<div class="empty">🔍 Koi result nahi mila</div>';
+    return;
+  }
+
+  document.getElementById('feed').innerHTML = filtered.map((d,i) => `
+    <div class="card ${d.type==='funding'?'fc':''}" style="animation-delay:${i*0.05}s">
+      <div class="card-top">
+        <div class="card-title">${d.title}</div>
+        <span class="badge ${d.type==='new'?'bn':d.type==='funding'?'bf':'bu'}">
+          ${d.type==='new'?'🚀 New':d.type==='funding'?'💰 Funding':'⚡ Update'}
+        </span>
+      </div>
+      <div class="card-meta">
+        <span>🏢 ${d.company}</span>
+        <span>📅 ${d.date}</span>
+        <span>🏷 ${d.category}</span>
+      </div>
+      ${d.amount ? `<div class="funding-amt">${d.amount}</div>` : ''}
+      <div class="card-summary">${d.summary}</div>
+      <div class="card-tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+}
+
+// ── Stats ─────────────────────────────────────────────────────
+function updateStats() {
+  const tools = allData.filter(d=>d.type==='new').length;
+  const funds = allData.filter(d=>d.type==='funding');
+  document.getElementById('sc').textContent = tools;
+  document.getElementById('fc').textContent = funds.length;
+  let total = 0;
+  funds.forEach(f => {
+    const m = f.amount?.match(/\$(\d+(?:\.\d+)?)(M|B)?/i);
+    if(m) total += parseFloat(m[1]) * (m[2]?.toUpperCase()==='B'?1000:1);
+  });
+  document.getElementById('tf').textContent = total ? `$${total/1000}B+` : '—';
+  updateTime();
+}
+
+function updateTime() {
+  const n = new Date();
+  document.getElementById('lu').textContent = n.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+}
+
+// ── Trending ──────────────────────────────────────────────────
+function renderTrending() {
+  const tools = allData.filter(d=>d.type==='new').slice(0,5);
+  document.getElementById('trending').innerHTML = tools.map((d,i)=>`
+    <div class="t-item" onclick="">
+      <div class="t-rank">${i+1}</div>
+      <div class="t-name">${d.company}</div>
+      <span class="t-badge">${d.category}</span>
+    </div>
+  `).join('');
+}
+
+// ── Top Funding ───────────────────────────────────────────────
+function renderTopFunding() {
+  const funds = allData.filter(d=>d.type==='funding').slice(0,4);
+  document.getElementById('topf').innerHTML = funds.map(d=>`
+    <div class="t-item">
+      <div class="t-name" style="font-size:0.78rem">${d.company}</div>
+      <span style="color:#a78bfa;font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem">${d.amount?.split(' ')[0]||'—'}</span>
+    </div>
+  `).join('');
+}
+
+// ── Categories ────────────────────────────────────────────────
+function renderCategories() {
+  const cats = {};
+  allData.forEach(d=>{ cats[d.category]=(cats[d.category]||0)+1; });
+  document.getElementById('cats').innerHTML = Object.entries(cats)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([cat,count])=>`
+      <div class="t-item">
+        <div class="t-name">${cat}</div>
+        <span class="t-badge">${count}</span>
+      </div>
+    `).join('');
+}
+
+// ── Ticker ────────────────────────────────────────────────────
+function buildTicker() {
+  const items = allData.map(d=>
+    `<span><strong>${d.company}</strong> — ${d.title}</span>`
+  ).join('');
+  document.getElementById('ticker').innerHTML = items + items;
+}
+
+// ── Filter ────────────────────────────────────────────────────
+function setF(type, btn) {
+  currentFilter = type;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderCards();
+}
+
+// ── Refresh ───────────────────────────────────────────────────
+function refresh() {
+  const btn = document.getElementById('rBtn');
+  const icon = document.getElementById('rIcon');
+  btn.disabled = true;
+  icon.className = 'spin';
+  icon.textContent = '↻';
+  setTimeout(()=>{
+    updateTime();
+    showToast("✓ Feed refreshed!");
+    icon.className = '';
+    btn.disabled = false;
+  }, 1500);
+}
+
+// ── Toast ─────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2500);
+}
+
+// ── Start ─────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

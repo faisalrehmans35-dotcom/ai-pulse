@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Pulse — New Tools & Funding Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LTL3MN66VH"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());gtag('config','G-LTL3MN66VH');
+</script>
+<script type="text/javascript">
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({
+    pageLanguage:'en',
+    includedLanguages:'en,hi,bn,te,mr,ta,ur,gu,kn,ml,pa,or,as,mai,kok,sd,ne,sa',
+    layout:google.translate.TranslateElement.InlineLayout.SIMPLE,
+    autoDisplay:false
+  },'google_translate_element');
+}
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<style>
+  :root{--bg:#050810;--bg2:#0c1120;--accent:#00f5c4;--accent2:#7c3aed;--accent3:#f59e0b;--text:#e2e8f0;--muted:#64748b;--border:rgba(255,255,255,0.07);--card:rgba(255,255,255,0.03);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,245,196,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,196,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+  .goog-te-banner-frame{display:none!important;}
+  body{top:0!important;}
+  .goog-te-gadget{font-size:0!important;}
+  .goog-te-gadget select{background:var(--bg2)!important;border:1px solid rgba(0,245,196,0.3)!important;color:var(--accent)!important;font-family:'DM Mono',monospace!important;font-size:0.75rem!important;padding:4px 8px!important;border-radius:8px!important;outline:none!important;cursor:pointer!important;}
+
+  .lang-bar{position:relative;z-index:99;background:rgba(0,245,196,0.04);border-bottom:1px solid rgba(0,245,196,0.1);padding:7px 1.5rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;}
+  .lang-label{font-size:0.68rem;color:var(--muted);white-space:nowrap;}
+
+  header{position:sticky;top:0;z-index:100;background:rgba(5,8,16,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 1.5rem;}
+  .header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;}
+  .logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;display:flex;align-items:center;gap:10px;}
+  .logo-dot{width:10px;height:10px;background:var(--accent);border-radius:50%;box-shadow:0 0 12px var(--accent);animation:pulse 2s infinite;}
+  .logo span{color:var(--accent);}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.8)}}
+  .live-badge{background:rgba(0,245,196,0.1);border:1px solid rgba(0,245,196,0.3);color:var(--accent);font-size:0.7rem;padding:4px 12px;border-radius:100px;display:flex;align-items:center;gap:6px;}
+  .live-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 1.5s infinite;}
+  .refresh-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 16px;border-radius:8px;font-family:'DM Mono',monospace;font-size:0.78rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+  .refresh-btn:hover{background:rgba(0,245,196,0.1);border-color:var(--accent);color:var(--accent);}
+  .spin{animation:spinIt 1s linear infinite;display:inline-block;}
+  @keyframes spinIt{to{transform:rotate(360deg);}}
+
+  .ticker-wrap{position:relative;z-index:1;background:rgba(0,245,196,0.05);border-bottom:1px solid rgba(0,245,196,0.1);overflow:hidden;padding:8px 0;}
+  .ticker{display:flex;gap:3rem;animation:tickerMove 50s linear infinite;white-space:nowrap;}
+  .ticker span{font-size:0.72rem;color:var(--accent);opacity:0.7;}
+  .ticker span strong{opacity:1;}
+  @keyframes tickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .hero{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem 1.5rem;}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:800;line-height:1.05;letter-spacing:-0.03em;margin-bottom:0.75rem;}
+  .hero h1 em{color:var(--accent);font-style:normal;}
+  .hero p{color:var(--muted);font-size:0.9rem;max-width:500px;line-height:1.7;}
+
+  .stats{position:relative;z-index:1;max-width:1200px;margin:0 auto 1.5rem;padding:0 1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.75rem;}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem;}
+  .stat-label{font-size:0.65rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;}
+  .stat-val{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;}
+  .green{color:var(--accent);}.purple{color:#a78bfa;}.amber{color:var(--accent3);}.gray{color:var(--muted);font-size:0.85rem!important;}
+
+  /* Search + Filters */
+  .search-section{position:relative;z-index:1;max-width:1200px;margin:0 auto 0.75rem;padding:0 1.5rem;}
+  .search-wrap{position:relative;margin-bottom:0.6rem;}
+  .search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:0.85rem;}
+  .search-in{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'DM Mono',monospace;font-size:0.85rem;padding:11px 14px 11px 38px;border-radius:12px;outline:none;transition:border-color 0.2s;}
+  .search-in:focus{border-color:rgba(0,245,196,0.5);background:rgba(0,245,196,0.03);}
+  .search-in::placeholder{color:var(--muted);}
+
+  .filter-row{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.4rem;}
+  .filter-label{font-size:0.62rem;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;margin-right:0.25rem;white-space:nowrap;}
+  .fbtn{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:4px 12px;border-radius:100px;font-family:'DM Mono',monospace;font-size:0.72rem;cursor:pointer;transition:all 0.2s;}
+  .fbtn:hover,.fbtn.active{background:rgba(0,245,196,0.1);border-color:rgba(0,245,196,0.4);color:var(--accent);}
+  .fbtn.fp.active{background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.4);color:var(--accent3);}
+  .fbtn.ff.active{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.4);color:#4ade80;}
+  .fbtn.fa.active{background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.4);color:#a78bfa;}
+
+  .main{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:0 1.5rem 4rem;display:grid;grid-template-columns:1fr 300px;gap:1.5rem;}
+  @media(max-width:800px){.main{grid-template-columns:1fr;}}
+
+  .feed-title{font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .result-count{font-size:0.7rem;color:var(--accent);font-weight:400;}
+
+  /* Cards */
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem;margin-bottom:0.75rem;transition:all 0.25s;cursor:pointer;text-decoration:none;display:block;color:inherit;animation:slideIn 0.35s ease forwards;opacity:0;transform:translateY(8px);}
+  @keyframes slideIn{to{opacity:1;transform:translateY(0);}}
+  .card:hover{background:rgba(255,255,255,0.05);border-color:rgba(0,245,196,0.3);box-shadow:0 4px 30px rgba(0,245,196,0.1);transform:translateY(-3px);}
+  .card.fc:hover{border-color:rgba(124,58,237,0.3);box-shadow:0 4px 30px rgba(124,58,237,0.1);}
+  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:0.75rem;margin-bottom:0.6rem;}
+  .card-title{font-family:'Syne',sans-serif;font-size:0.98rem;font-weight:700;line-height:1.3;}
+  .badge{font-size:0.62rem;font-weight:500;padding:3px 9px;border-radius:100px;letter-spacing:0.07em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+  .bn{background:rgba(0,245,196,0.12);color:var(--accent);border:1px solid rgba(0,245,196,0.25);}
+  .bf{background:rgba(124,58,237,0.12);color:#a78bfa;border:1px solid rgba(124,58,237,0.25);}
+  .bu{background:rgba(245,158,11,0.12);color:var(--accent3);border:1px solid rgba(245,158,11,0.25);}
+  .card-meta{display:flex;gap:0.6rem;font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem;flex-wrap:wrap;align-items:center;}
+  .card-use{font-size:0.78rem;color:var(--accent);margin-bottom:0.5rem;opacity:0.9;}
+
+  /* Free/Paid badges */
+  .price-badge{font-size:0.62rem;font-weight:600;padding:3px 10px;border-radius:100px;letter-spacing:0.05em;text-transform:uppercase;}
+  .price-free{background:rgba(34,197,94,0.12);color:#4ade80;border:1px solid rgba(34,197,94,0.3);}
+  .price-paid{background:rgba(245,158,11,0.12);color:var(--accent3);border:1px solid rgba(245,158,11,0.3);}
+  .price-freemium{background:rgba(99,102,241,0.12);color:#818cf8;border:1px solid rgba(99,102,241,0.3);}
+  .price-detail{font-size:0.7rem;color:var(--muted);margin-top:0.25rem;margin-bottom:0.5rem;}
+
+  .card-summary{font-size:0.82rem;line-height:1.6;color:#94a3b8;}
+  .card-tags{display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.75rem;}
+  .tag{font-size:0.65rem;padding:2px 9px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:100px;color:var(--muted);}
+  .funding-amt{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;color:#a78bfa;margin:0.4rem 0;}
+  .card-open{font-size:0.68rem;color:var(--accent);margin-top:0.75rem;opacity:0.5;transition:opacity 0.2s;}
+  .card:hover .card-open{opacity:1;}
+  .empty{text-align:center;padding:3rem;color:var(--muted);font-size:0.85rem;}
+
+  .sidebar-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem;margin-bottom:1.25rem;}
+  .sidebar-title{font-family:'Syne',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.75rem;padding-bottom:0.4rem;border-bottom:1px solid var(--border);}
+  .t-item{display:flex;align-items:center;gap:0.6rem;padding:0.5rem 0;border-bottom:1px solid var(--border);font-size:0.8rem;cursor:pointer;transition:color 0.2s;}
+  .t-item:last-child{border-bottom:none;}
+  .t-item:hover{color:var(--accent);}
+  .t-rank{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;color:rgba(255,255,255,0.1);width:20px;flex-shrink:0;}
+  .t-name{flex:1;}.t-badge{font-size:0.6rem;padding:2px 7px;background:rgba(0,245,196,0.08);color:var(--accent);border-radius:100px;}
+
+  .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--bg2);border:1px solid var(--accent);color:var(--accent);padding:10px 18px;border-radius:10px;font-size:0.78rem;z-index:1000;transform:translateY(80px);opacity:0;transition:all 0.3s;}
+  .toast.show{transform:translateY(0);opacity:1;}
+  .ad-slot{display:none;}
+</style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <span class="lang-label">🌐 Apni Bhasha chuniye:</span>
+  <div id="google_translate_element"></div>
+</div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo"><div class="logo-dot"></div>AI<span>Pulse</span></div>
+    <div style="display:flex;align-items:center;gap:0.75rem">
+      <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+      <button class="refresh-btn" id="rBtn" onclick="refresh()"><span id="rIcon">↻</span> Refresh</button>
+    </div>
+  </div>
+</header>
+
+<div class="ticker-wrap"><div class="ticker" id="ticker"></div></div>
+
+<div class="hero">
+  <h1>Naye AI Tools aur<br><em>Funding</em> ki<br>Latest News</h1>
+  <p>Search karo, filter karo — Free ya Paid. Tool pe <strong style="color:var(--accent)">click karo</strong> seedha website khulegi! 🌐 Upar se apni bhasha chuniye.</p>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-label">Naye Tools</div><div class="stat-val green" id="sc">0</div></div>
+  <div class="stat"><div class="stat-label">Funding Rounds</div><div class="stat-val purple" id="fc">0</div></div>
+  <div class="stat"><div class="stat-label">Total Funding</div><div class="stat-val amber" id="tf">—</div></div>
+  <div class="stat"><div class="stat-label">Updated</div><div class="stat-val gray" id="lu">—</div></div>
+</div>
+
+<div class="search-section">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-in" id="sq" placeholder="Search karo — jaise: image generation, coding, voice, free tools..." oninput="renderCards()">
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Type:</span>
+    <button class="fbtn active" onclick="setF('type','all',this)">🔥 Sab</button>
+    <button class="fbtn" onclick="setF('type','new',this)">🚀 Naye Tools</button>
+    <button class="fbtn fa" onclick="setF('type','funding',this)">💰 Funding</button>
+    <button class="fbtn" onclick="setF('type','update',this)">⚡ Updates</button>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Price:</span>
+    <button class="fbtn active" onclick="setF('price','all',this)" id="pAll">💎 Sab</button>
+    <button class="fbtn ff" onclick="setF('price','free',this)">✅ Free</button>
+    <button class="fbtn fp" onclick="setF('price','freemium',this)">🔄 Freemium</button>
+    <button class="fbtn fp" onclick="setF('price','paid',this)">💳 Paid</button>
+  </div>
+</div>
+
+<div class="main">
+  <div>
+    <div class="feed-title">
+      <span>👆 Tool pe click karo — seedha website khulegi</span>
+      <span class="result-count" id="resultCount"></span>
+    </div>
+    <div id="feed"></div>
+  </div>
+  <div>
+    <div class="sidebar-box">
+      <div class="sidebar-title">🔥 Trending Tools</div>
+      <div id="trending"></div>
+    </div>
+    <div class="sidebar-box">
+      <div class="sidebar-title">✅ Free Tools</div>
+      <div id="freetools"></div>
+    </div>
+    <div class="sidebar-box">
+      <div class="sidebar-title">💰 Top Funding</div>
+      <div id="topf"></div>
+    </div>
+    <div class="sidebar-box">
+      <div class="sidebar-title">📊 Categories</div>
+      <div id="cats"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const allData = [
+  // NEW TOOLS
+  {id:1,type:"new",title:"Claude 3.7 Sonnet — AI Chatbot & Coder",company:"Anthropic",date:"24 Feb 2025",sortDate:20250224,category:"LLM",use:"🧠 Kaam: Complex coding, writing aur deep thinking",amount:null,link:"https://claude.ai",pricing:"freemium",pricingDetail:"Free plan available • Pro $20/month",
+    summary:"Anthropic ka sabse smart model — extended thinking mode ke saath. Coding mein sabse best performance. SWE-bench pe 70% score jo abhi tak ka record hai.",tags:["LLM","Claude","Coding","Writing"]},
+  {id:2,type:"new",title:"Adobe Firefly 4 — Professional Image Generator",company:"Adobe",date:"22 Feb 2025",sortDate:20250222,category:"Image Generation",use:"🎨 Kaam: Copyright-safe professional images banao",amount:null,link:"https://firefly.adobe.com",pricing:"freemium",pricingDetail:"25 free credits/month • Premium $4.99/month",
+    summary:"Adobe ka AI image generation tool jo commercially safe hai. Photoshop ke saath fully integrated. Professional designers ke liye best choice.",tags:["Image Generation","Adobe","Professional"]},
+  {id:3,type:"new",title:"Runway Gen-4 — AI Video Generator",company:"Runway",date:"20 Feb 2025",sortDate:20250220,category:"Video Generation",use:"🎬 Kaam: AI se videos generate aur edit karo",amount:null,link:"https://runwayml.com",pricing:"freemium",pricingDetail:"Limited free • Standard $15/month",
+    summary:"Hollywood-level video generation ab sabke liye. Characters consistent rehte hain poori video mein. Film industry mein revolution.",tags:["Video Generation","Film","Creative"]},
+  {id:4,type:"new",title:"Grok 3 — xAI ka Powerful AI",company:"xAI",date:"18 Feb 2025",sortDate:20250218,category:"LLM",use:"🤖 Kaam: Advanced reasoning, coding aur real-time search",amount:null,link:"https://grok.com",pricing:"freemium",pricingDetail:"Free on X • SuperGrok $30/month",
+    summary:"Elon Musk ki xAI ne Grok 3 launch kiya. Maths aur science mein GPT-4 se better. DeepSearch se real-time web search. X Premium users ke liye free.",tags:["LLM","Grok","xAI","Coding"]},
+  {id:5,type:"new",title:"Mistral Le Chat — Fastest Free Chatbot",company:"Mistral AI",date:"17 Feb 2025",sortDate:20250217,category:"LLM",use:"💬 Kaam: Fastest AI chatbot — 1000 words/second",amount:null,link:"https://chat.mistral.ai",pricing:"free",pricingDetail:"Bilkul FREE — koi payment nahi",
+    summary:"Duniya ka sabse fast AI chatbot — sirf 1 second mein 1000 words likhta hai. Bilkul free mein use karo. European privacy ke saath safe.",tags:["LLM","Fast","Free","Chatbot"]},
+  {id:6,type:"new",title:"Sora 2.0 — Text to Video AI",company:"OpenAI",date:"15 Feb 2025",sortDate:20250215,category:"Video Generation",use:"📹 Kaam: Text likho, AI realistic video bana deta hai",amount:null,link:"https://sora.com",pricing:"paid",pricingDetail:"ChatGPT Plus $20/month mein included",
+    summary:"Text se realistic videos banao — 4K quality mein, 2 minute tak. Filmmakers, YouTubers aur marketers ke liye best tool.",tags:["Video Generation","Text-to-Video","OpenAI"]},
+  {id:7,type:"new",title:"Midjourney V7 — Best Image Generator",company:"Midjourney",date:"10 Feb 2025",sortDate:20250210,category:"Image Generation",use:"🎨 Kaam: Text se photorealistic images banao",amount:null,link:"https://midjourney.com",pricing:"paid",pricingDetail:"Basic plan $10/month • No free tier",
+    summary:"Sirf kuch words likho aur stunning images ban jayengi. Human faces aur hands ab bilkul perfect. Designers ke liye best image generation tool.",tags:["Image Generation","Art","Creative"]},
+  {id:8,type:"new",title:"Cursor 0.44 — AI Code Editor",company:"Anysphere",date:"08 Feb 2025",sortDate:20250208,category:"Coding",use:"💻 Kaam: AI se code likhwao aur bugs fix karwao",amount:null,link:"https://cursor.com",pricing:"freemium",pricingDetail:"Free plan available • Pro $20/month",
+    summary:"Developers ke liye best AI tool — poori app ka code khud likhta hai. Multi-file editing aur automatic bug fixing. VS Code se better experience.",tags:["Coding","IDE","Developer"]},
+  {id:9,type:"new",title:"Perplexity Assistant — AI Search Agent",company:"Perplexity AI",date:"05 Feb 2025",sortDate:20250205,category:"Search",use:"📱 Kaam: Real-time AI search aur phone assistant",amount:null,link:"https://perplexity.ai",pricing:"freemium",pricingDetail:"Free available • Pro $20/month",
+    summary:"Real-time web search ke saath AI assistant. Phone pe calls karta hai, appointments book karta hai. Google se better answers deta hai.",tags:["Search","Agent","Mobile"]},
+  {id:10,type:"new",title:"Gemini 2.0 Flash — Google AI",company:"Google DeepMind",date:"20 Jan 2025",sortDate:20250120,category:"LLM",use:"⚡ Kaam: Ultra-fast AI chatbot, image & analysis",amount:null,link:"https://gemini.google.com",pricing:"freemium",pricingDetail:"Free available • Advanced $19.99/month",
+    summary:"Google ka sabse tez AI model. Text, image, audio, video sab samajhta hai. Gmail aur Google apps ke saath integrated. ChatGPT ka strong competitor.",tags:["LLM","Google","Fast","Multimodal"]},
+  {id:11,type:"new",title:"ElevenLabs Voice Design — AI Voice Generator",company:"ElevenLabs",date:"15 Jan 2025",sortDate:20250115,category:"Voice Generation",use:"🎙️ Kaam: Apni marzi ki AI awaaz banao ya clone karo",amount:null,link:"https://elevenlabs.io",pricing:"freemium",pricingDetail:"10,000 free chars/month • Starter $5/month",
+    summary:"Sirf text description se koi bhi awaaz banao. Podcasters, YouTubers ke liye. Voice clone bhi kar sakte ho. 29 languages support.",tags:["Voice Generation","TTS","Audio","Clone"]},
+  {id:12,type:"new",title:"Devin 2.0 — Autonomous AI Developer",company:"Cognition AI",date:"10 Jan 2025",sortDate:20250110,category:"Coding",use:"🤖 Kaam: Poori app khud se banata hai — no human needed",amount:null,link:"https://cognition.ai",pricing:"paid",pricingDetail:"Enterprise pricing — $500+/month",
+    summary:"Pehla AI jo sach mein akela developer ki tarah kaam karta hai — poori apps banata hai, deploy karta hai, bugs fix karta hai.",tags:["Coding","Autonomous","Agent","Enterprise"]},
+  {id:13,type:"new",title:"DALL-E 3 — OpenAI Image Generator",company:"OpenAI",date:"01 Jan 2025",sortDate:20250101,category:"Image Generation",use:"🖼️ Kaam: ChatGPT se seedha images banao",amount:null,link:"https://chatgpt.com",pricing:"freemium",pricingDetail:"Limited free • Plus $20/month mein unlimited",
+    summary:"ChatGPT ke andar built-in image generation. Sirf bolo 'ek sunset ki photo banao' aur DALL-E 3 bana dega. Sabse aasaan image generation tool.",tags:["Image Generation","OpenAI","ChatGPT"]},
+  {id:14,type:"new",title:"Stable Diffusion 3.5 — Free Image AI",company:"Stability AI",date:"15 Dec 2024",sortDate:20241215,category:"Image Generation",use:"🎨 Kaam: Free mein images banao — locally bhi",amount:null,link:"https://stability.ai",pricing:"free",pricingDetail:"Open source — bilkul FREE. Local pe bhi run kar sakte ho",
+    summary:"Open source image generation tool — free mein use karo ya apne computer pe install karo. Midjourney se thoda kam quality lekin bilkul free.",tags:["Image Generation","Open Source","Free","Local"]},
+  // FUNDING
+  {id:15,type:"funding",title:"Anthropic — $2 Billion Funding",company:"Anthropic",date:"20 Jan 2025",sortDate:20250120,category:"LLM",use:"🏢 Claude AI banane wali company",amount:"$2B Series E",link:"https://anthropic.com",pricing:"info",pricingDetail:"",
+    summary:"Claude AI banane wali company ko Amazon ne $2 Billion di. Total valuation $60 Billion ho gayi.",tags:["Funding","LLM","Safety"]},
+  {id:16,type:"funding",title:"Harvey AI — $300M Legal AI",company:"Harvey AI",date:"12 Feb 2025",sortDate:20250212,category:"Legal",use:"🏢 Lawyers ke liye AI tool",amount:"$300M Series D",link:"https://harvey.ai",pricing:"info",pricingDetail:"",
+    summary:"Lawyers aur law firms ke liye AI tool Harvey ne $300M raise kiye. Legal documents analyse karta hai. Valuation $3 Billion.",tags:["Funding","Legal","Enterprise"]},
+  {id:17,type:"funding",title:"Poolside AI — $500M Coding AI",company:"Poolside",date:"05 Feb 2025",sortDate:20250205,category:"Coding",use:"🏢 Enterprise coding AI company",amount:"$500M Series B",link:"https://poolside.ai",pricing:"info",pricingDetail:"",
+    summary:"Enterprise companies ke liye AI coding tool. Large codebases samajhta hai aur improve karta hai.",tags:["Funding","Coding","Enterprise"]},
+  {id:18,type:"funding",title:"Mistral AI — $1 Billion Funding",company:"Mistral AI",date:"15 Jan 2025",sortDate:20250115,category:"LLM",use:"🏢 Europe ki top open-source AI company",amount:"$1B Series C",link:"https://mistral.ai",pricing:"info",pricingDetail:"",
+    summary:"France ki AI company Mistral ne $1 Billion raise kiye. Valuation $6 Billion ho gayi.",tags:["Funding","OpenSource","Europe"]},
+  {id:19,type:"funding",title:"Perplexity AI — $500M Funding",company:"Perplexity AI",date:"10 Jan 2025",sortDate:20250110,category:"Search",use:"🏢 AI-powered search engine",amount:"$500M Series D",link:"https://perplexity.ai",pricing:"info",pricingDetail:"",
+    summary:"Google ko replace karne wala AI search engine. Valuation $9 Billion. 15 million daily users.",tags:["Funding","Search","Startup"]},
+  {id:20,type:"funding",title:"xAI (Grok) — $6 Billion Funding",company:"xAI",date:"20 Dec 2024",sortDate:20241220,category:"LLM",use:"🏢 Elon Musk ki AI company",amount:"$6B Series B",link:"https://x.ai",pricing:"info",pricingDetail:"",
+    summary:"Elon Musk ki xAI ne $6 Billion raise kiye. Grok AI ko aur powerful banaya jayega. Valuation $50 Billion.",tags:["Funding","Grok","Musk"]},
+  {id:21,type:"funding",title:"Anysphere (Cursor) — $900M Funding",company:"Anysphere",date:"15 Dec 2024",sortDate:20241215,category:"Coding",use:"🏢 Cursor AI editor banane wali company",amount:"$900M Series C",link:"https://cursor.com",pricing:"info",pricingDetail:"",
+    summary:"Cursor banane wali Anysphere ne $900M raise kiye at $9.9 Billion valuation.",tags:["Funding","Coding","Startup"]},
+  // UPDATES
+  {id:22,type:"update",title:"WhatsApp — Meta AI ab India mein FREE",company:"Meta",date:"19 Feb 2025",sortDate:20250219,category:"Chatbot",use:"🆕 Update: WhatsApp mein free AI assistant aaya",amount:null,link:"https://whatsapp.com",pricing:"free",pricingDetail:"Bilkul FREE — WhatsApp users ke liye",
+    summary:"Meta AI ab WhatsApp India mein. Blue circle icon pe tap karo. Images generate karo, sawal poochho — bilkul free.",tags:["WhatsApp","Meta","India","Free"]},
+  {id:23,type:"update",title:"ChatGPT — Free Image Generation",company:"OpenAI",date:"12 Feb 2025",sortDate:20250212,category:"Image Generation",use:"🆕 Update: Free mein images ban sakti hain ab",amount:null,link:"https://chatgpt.com",pricing:"freemium",pricingDetail:"Limited free • Plus $20/month mein unlimited",
+    summary:"DALL-E 3 image generation ab free ChatGPT users ke liye bhi. Limited daily images. Midjourney ka free alternative.",tags:["Image Generation","ChatGPT","Free"]},
+  {id:24,type:"update",title:"Claude — PDF aur Excel File Reading",company:"Anthropic",date:"05 Feb 2025",sortDate:20250205,category:"Productivity",use:"🆕 Update: Files directly upload karke analyze karo",amount:null,link:"https://claude.ai",pricing:"freemium",pricingDetail:"Free plan mein bhi available",
+    summary:"Claude ab seedha PDF, Excel aur Word files padh sakta hai. 200 page document ka summary 30 second mein.",tags:["Claude","Files","Productivity"]},
+  {id:25,type:"update",title:"Gemini — Google Workspace Integration",company:"Google",date:"25 Jan 2025",sortDate:20250125,category:"Productivity",use:"🆕 Update: Gmail aur Docs mein AI directly",amount:null,link:"https://workspace.google.com",pricing:"freemium",pricingDetail:"Workspace users ke liye included",
+    summary:"Gemini AI ab Gmail, Docs, Sheets aur Slides mein built-in. Google Workspace subscribers ke liye free.",tags:["Google","Workspace","Productivity"]},
+].sort((a,b)=>b.sortDate-a.sortDate);
+
+let filters={type:'all',price:'all'};
+
+function priceBadge(p){
+  if(p==='free')return'<span class="price-badge price-free">✅ FREE</span>';
+  if(p==='freemium')return'<span class="price-badge price-freemium">🔄 Freemium</span>';
+  if(p==='paid')return'<span class="price-badge price-paid">💳 Paid</span>';
+  return'';
+}
+
+function init(){renderCards();updateStats();renderTrending();renderFreeTools();renderTopFunding();renderCategories();buildTicker();updateTime();showToast("✓ Feed loaded! Tool pe click karo!");}
+
+function renderCards(){
+  const q=document.getElementById('sq').value.toLowerCase();
+  const filtered=allData.filter(d=>{
+    if(filters.type!=='all'&&d.type!==filters.type)return false;
+    if(filters.price!=='all'&&d.pricing!==filters.price)return false;
+    if(q){
+      const searchIn=(d.title+d.company+d.summary+d.category+d.tags.join('')+d.use+(d.pricingDetail||'')).toLowerCase();
+      if(!searchIn.includes(q))return false;
+    }
+    return true;
+  });
+  document.getElementById('resultCount').textContent=filtered.length+' result';
+  if(!filtered.length){document.getElementById('feed').innerHTML='<div class="empty">🔍 Koi result nahi mila<br><small style="color:var(--muted)">Alag keyword try karo</small></div>';return;}
+  document.getElementById('feed').innerHTML=filtered.map((d,i)=>`
+    <a class="card ${d.type==='funding'?'fc':''}" href="${d.link}" target="_blank" rel="noopener" style="animation-delay:${i*0.04}s">
+      <div class="card-top">
+        <div class="card-title">${d.title}</div>
+        <span class="badge ${d.type==='new'?'bn':d.type==='funding'?'bf':'bu'}">${d.type==='new'?'🚀 New':d.type==='funding'?'💰 Funding':'⚡ Update'}</span>
+      </div>
+      <div class="card-meta">
+        <span>🏢 ${d.company}</span><span>📅 ${d.date}</span><span>🏷 ${d.category}</span>
+        ${priceBadge(d.pricing)}
+      </div>
+      ${d.pricingDetail&&d.pricing!=='info'?`<div class="price-detail">💡 ${d.pricingDetail}</div>`:''}
+      <div class="card-use">${d.use}</div>
+      ${d.amount?`<div class="funding-amt">${d.amount}</div>`:''}
+      <div class="card-summary">${d.summary}</div>
+      <div class="card-tags">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="card-open">👆 Click karo — ${d.link.replace('https://','').split('/')[0]} pe khulega →</div>
+    </a>
+  `).join('');
+}
+
+function updateStats(){
+  document.getElementById('sc').textContent=allData.filter(d=>d.type==='new').length;
+  const funds=allData.filter(d=>d.type==='funding');
+  document.getElementById('fc').textContent=funds.length;
+  let total=0;
+  funds.forEach(f=>{const m=f.amount?.match(/\$(\d+(?:\.\d+)?)(M|B)?/i);if(m)total+=parseFloat(m[1])*(m[2]?.toUpperCase()==='B'?1000:1);});
+  document.getElementById('tf').textContent=total?`$${(total/1000).toFixed(1)}B+`:'—';
+  updateTime();
+}
+
+function updateTime(){document.getElementById('lu').textContent=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});}
+
+function renderTrending(){
+  document.getElementById('trending').innerHTML=allData.filter(d=>d.type==='new').slice(0,5).map((d,i)=>`
+    <div class="t-item" onclick="window.open('${d.link}','_blank')">
+      <div class="t-rank">${i+1}</div><div class="t-name">${d.company}</div><span class="t-badge">${d.category}</span>
+    </div>`).join('');
+}
+
+function renderFreeTools(){
+  document.getElementById('freetools').innerHTML=allData.filter(d=>d.pricing==='free'&&d.type==='new').map(d=>`
+    <div class="t-item" onclick="window.open('${d.link}','_blank')">
+      <div class="t-name" style="font-size:0.78rem">${d.company}</div>
+      <span style="color:#4ade80;font-size:0.65rem;padding:2px 7px;background:rgba(34,197,94,0.08);border-radius:100px;">FREE</span>
+    </div>`).join('');
+}
+
+function renderTopFunding(){
+  document.getElementById('topf').innerHTML=allData.filter(d=>d.type==='funding').slice(0,4).map(d=>`
+    <div class="t-item" onclick="window.open('${d.link}','_blank')">
+      <div class="t-name" style="font-size:0.78rem">${d.company}</div>
+      <span style="color:#a78bfa;font-family:'Syne',sans-serif;font-weight:700;font-size:0.8rem">${d.amount?.split(' ')[0]||'—'}</span>
+    </div>`).join('');
+}
+
+function renderCategories(){
+  const cats={};
+  allData.forEach(d=>{cats[d.category]=(cats[d.category]||0)+1;});
+  document.getElementById('cats').innerHTML=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,count])=>`
+    <div class="t-item" onclick="document.getElementById('sq').value='${cat.toLowerCase()}';renderCards()">
+      <div class="t-name">${cat}</div><span class="t-badge">${count}</span>
+    </div>`).join('');
+}
+
+function buildTicker(){
+  const items=allData.map(d=>`<span><strong>${d.company}</strong> — ${d.title}</span>`).join('');
+  document.getElementById('ticker').innerHTML=items+items;
+}
+
+let typeActive=null,priceActive=null;
+function setF(filterType,val,btn){
+  filters[filterType]=val;
+  if(filterType==='type'){
+    document.querySelectorAll('.filter-row:nth-child(2) .fbtn').forEach(b=>b.classList.remove('active'));
+  } else {
+    document.querySelectorAll('.filter-row:nth-child(3) .fbtn').forEach(b=>b.classList.remove('active'));
+  }
+  btn.classList.add('active');
+  renderCards();
+}
+
+function refresh(){
+  const btn=document.getElementById('rBtn'),icon=document.getElementById('rIcon');
+  btn.disabled=true;icon.className='spin';icon.textContent='↻';
+  setTimeout(()=>{updateTime();showToast("✓ Feed refreshed!");icon.className='';btn.disabled=false;},1500);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+window.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
